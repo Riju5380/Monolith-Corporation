@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | My Cart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">My<span>CART</span></div>
+            <button class="btn" onclick="window.location.href='customer.html'">Back to Shop</button>
+        </header>
+
+        <div class="glass-panel">
+            <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <th style="padding: 15px;">Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 15px;">
+                            <strong>Fresh Potato</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Green Valley Veggies</span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button class="btn" style="padding: 2px 8px;">-</button>
+                                <span>2kg</span>
+                                <button class="btn" style="padding: 2px 8px;">+</button>
+                            </div>
+                        </td>
+                        <td>$2.00</td>
+                        <td>$4.00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">
+                            <strong>Cooking Oil (1L)</strong><br>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">Green Valley Veggies</span>
+                        </td>
+                        <td>1</td>
+                        <td>$5.50</td>
+                        <td>$5.50</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 30px; text-align: right;">
+                <h3>Total: <span style="color: var(--primary);">$9.50</span></h3>
+                <br>
+                <button class="btn btn-primary" onclick="window.location.href='payment.html'">Proceed to Pay</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

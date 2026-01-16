@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | Setup Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="shopkeeper-theme">
+
+    <div class="gradient-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    <div class="noise-overlay"></div>
+
+    <div class="container" style="max-width: 600px; margin-top: 50px;">
+        <div class="glass-panel">
+            <h2 style="margin-bottom: 20px;">List Your Shop</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Enter your details to generate your QR Code.</p>
+
+            <form onsubmit="event.preventDefault(); window.location.href='shopkeeper.html'">
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Shop Name</label>
+                    <input type="text" class="input-field" placeholder="e.g. Raju's General Store" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Category</label>
+                    <select style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                        <option>Grocery / Vegetables</option>
+                        <option>Electronics</option>
+                        <option>Fashion</option>
+                        <option>Pharmacy</option>
+                        <option>Restaurant</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Description</label>
+                    <textarea rows="3" placeholder="Famous for fresh vegetables..." style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display:block; margin-bottom: 5px;">Owner Name</label>
+                        <input type="text" class="input-field" placeholder="Full Name" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main);">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom: 5px;">Location</label>
+                        <button class="btn" style="width: 100%; padding: 12px; border: 1px dashed var(--primary);">📍 Auto-Detect</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%;">Create Shop Dashboard</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
