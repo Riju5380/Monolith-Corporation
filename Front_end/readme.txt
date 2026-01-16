@@ -1,145 +1,301 @@
-1. Updated File Structure
-Please ensure these endpoints correspond to the following pages:
+================================================================================
+                            DIGISHOP | MONOLITH CORPORATION
+                             Frontend Documentation v3.0
+================================================================================
 
-index.html -> Landing Page
+PROJECT REPOSITORY: https://github.com/Riju5380/Monolith-Corporation.git
+PROJECT TYPE:       "Phygital" E-Commerce Platform (Physical + Digital)
+FRONTEND STACK:     HTML5, CSS3 (Glassmorphism), Vanilla JavaScript
+VERSION:            3.0 (Includes Delivery Portal, Multilingual & Dark Mode)
 
-login.html -> Universal Login
+================================================================================
+                                1. FOLDER STRUCTURE
+================================================================================
+Ensure your project folder matches this tree exactly for links to work.
 
-shop_register.html (NEW) -> First-time setup for Shopkeepers.
+DigiSHOP/
+├── index.html                # [Landing] The "Who are you?" Gateway
+├── login.html                # [Auth] Universal Login (Customer/Shopkeeper/Admin)
+├── signup.html               # [Auth] Animated Split-Screen (Buy vs Sell)
+│
+├── css/
+│   └── style.css             # [Core] The Design Engine (Glassmorphism & Themes)
+│
+├── js/
+│   ├── script.js             # [Core] Global Logic (Dark Mode, Tab Switching)
+│   ├── shopkeeper.js         # [Logic] Shopkeeper Modals & Language Translation
+│   └── delivery.js           # [Logic] Delivery Dashboard Simulation
+│
+├── pages/ (Recommended to keep in root for now, but logical separation below)
+│   ├── customer.html         # [User] Main Shopping Feed
+│   ├── customer_register.html# [User] Signup with GPS Location
+│   ├── cart.html             # [User] Shopping Cart
+│   ├── payment.html          # [User] Payment Gateway Mockup
+│   │
+│   ├── shopkeeper.html       # [Partner] Main Dashboard (Orders, Products)
+│   ├── shop_register.html    # [Partner] First-time Shop Setup
+│   │
+│   ├── delivery_login.html   # [Logistics] Delivery Partner Login/Signup
+│   ├── delivery_dashboard.html # [Logistics] Live Order Tracking
+│   │
+│   └── admin.html            # [Admin] Global Statistics
+│
+└── README.md                 # This File
 
-customer.html -> Main Shopping Feed.
+================================================================================
+                                2. COLOR SYSTEM
+================================================================================
+The CSS uses CSS Variables (`var(--primary)`) to switch themes dynamically.
 
-cart.html (NEW) -> Customer Cart Review.
+| ROLE          | PRIMARY COLOR       | HEX CODE  | ACCENT COLOR |
+|---------------|---------------------|-----------|--------------|
+| CUSTOMER      | Electric Violet     | #6366f1   | Cyan (#06b6d4) |
+| SHOPKEEPER    | Sunset Orange       | #f97316   | Amber (#f59e0b) |
+| ADMIN         | Emerald Green       | #10b981   | Blue (#3b82f6) |
+| DELIVERY BOY  | Crimson Red         | #ef4444   | Dark Red (#991b1b) |
+| DARK MODE     | Deep Black          | #050505   | (Default Bg) |
+| LIGHT MODE    | Off-White           | #f4f4f5   | (Override)   |
 
-payment.html (NEW) -> Payment Gateway Simulation.
+================================================================================
+                            3. BACKEND API REQUIREMENTS
+================================================================================
+Your backend developer must create these Endpoints to make the frontend functional.
 
-shopkeeper.html -> Partner Dashboard (Now supports Grouped Orders & Product Adding).
+--------------------------------------------------------------------------------
+A. AUTHENTICATION
+--------------------------------------------------------------------------------
+[POST] /api/login
+       Input:  { email, password, role }
+       Output: { success: true, token: "xyz", redirect: "/dashboard" }
 
-admin.html -> Admin Stats.
+[POST] /api/register/customer
+       Input:  { name, mobile, password, lat, lng }
 
-2. API Endpoints & Data Requirements
-A. Authentication & Onboarding
-1. Shop Registration
+[POST] /api/register/shop
+       Input:  { owner_id, shop_name, category, description, location }
+       Output: { shop_id: 101, qr_string: "DigiShop-101" }
 
-Page: shop_register.html
+--------------------------------------------------------------------------------
+B. SHOPKEEPER DASHBOARD (`shopkeeper.js`)
+--------------------------------------------------------------------------------
+[GET]  /api/shop/orders
+       Returns list of active orders grouped by ID.
+       JSON Structure:
+       [
+         {
+           "order_id": 1024,
+           "status": "PAID",
+           "items": [{"name": "Potato", "price": 2.00}],
+           "actions": ["accept", "reject"]
+         }
+       ]
 
-Endpoint: POST /api/shop/register
+[POST] /api/product/add
+       Input: { name, price, shop_id }
 
-Frontend sends JSON:
+[POST] /api/shop/update-description
+       Input: { shop_id, new_description }
 
-JSON
+--------------------------------------------------------------------------------
+C. DELIVERY PORTAL (`delivery_dashboard.html`)
+--------------------------------------------------------------------------------
+[POST] /api/delivery/connect
+       Input:  { delivery_user_id, shop_id, access_password }
+       Output: { success: true, shop_name: "Raju Store" }
 
-{
-  "owner_id": 123,           // From Login Session
-  "shop_name": "Raju Store",
-  "category": "Grocery",
-  "description": "Fresh veg...",
-  "location": { "lat": 22.57, "lng": 88.36 }
-}
-Backend Action: Create shop entry, generate QR string, redirect to shopkeeper.html.
+[GET]  /api/delivery/live-feed
+       Polling endpoint to check for "Ready for Delivery" orders.
+       Returns:
+       {
+         "order_id": 1025,
+         "customer_address": "12/B Lake View",
+         "payment_mode": "COD",
+         "amount": 15.00
+       }
 
-B. Customer Experience
-2. Cart Management
+================================================================================
+                            4. SPECIAL FEATURES LOGIC
+================================================================================
 
-Page: cart.html
+1. MULTILINGUAL SUPPORT (Shopkeeper Page)
+   - Logic File: `shopkeeper.js`
+   - Languages: English (en), Hindi (hi), Bengali (bn).
+   - Implementation: The frontend stores a JSON dictionary `translations`. 
+     When the dropdown changes, it swaps the `innerText` of IDs like `txt_scan`.
 
-Endpoint: GET /api/cart
+2. DARK / LIGHT MODE
+   - Logic: Toggles the class `.light-mode` on the `<body>` tag.
+   - Default: Dark Mode (for premium aesthetic).
+   - Delivery Page: Has separate override styles in `delivery_dashboard.html`.
 
-Expected Data Structure:
+3. GPS LOCATION (Customer Signup)
+   - Uses: `navigator.geolocation.getCurrentPosition()`.
+   - Note: This works on `localhost` and `https`. It may be blocked on `http` 
+     unless you are testing locally.
 
-JSON
+================================================================================
+                                5. QUICK START
+================================================================================
+1. Clone the repo:
+   git clone https://github.com/Riju5380/Monolith-Corporation.git
 
-{
-  "items": [
-    {
-      "product_id": 55,
-      "name": "Fresh Potato",
-      "shop_name": "Green Valley Veggies",
-      "price": 2.00,
-      "qty": 2,
-      "total": 4.00
-    }
-  ],
-  "grand_total": 9.50
-}
-3. Payment Processing
+2. Open the folder.
 
-Page: payment.html
+3. Launch:
+   Double-click `index.html`.
 
-Endpoint: POST /api/payment/process
+4. Test Flow:
+   - Click "Partner" -> Login -> See Orange Theme.
+   - Click "Delivery" (in URL type delivery_login.html) -> See Red Theme.
+   - Test Language Switcher on Shopkeeper Page.
 
-Frontend sends JSON:
+================================================================================
+                            DIGISHOP | MONOLITH CORPORATION
+                             Frontend Documentation v3.0
+================================================================================
 
-JSON
+PROJECT REPOSITORY: https://github.com/Riju5380/Monolith-Corporation.git
+PROJECT TYPE:       "Phygital" E-Commerce Platform (Physical + Digital)
+FRONTEND STACK:     HTML5, CSS3 (Glassmorphism), Vanilla JavaScript
+VERSION:            3.0 (Includes Delivery Portal, Multilingual & Dark Mode)
 
-{
-  "user_id": 456,
-  "amount": 9.50,
-  "method": "upi" // or 'card', 'cod'
-}
-Backend Action: Create Order records, Clear Cart, Return "Success".
+================================================================================
+                                1. FOLDER STRUCTURE
+================================================================================
+Ensure your project folder matches this tree exactly for links to work.
 
-C. Shopkeeper Dashboard (Major Updates)
-4. Add New Product
+DigiSHOP/
+├── index.html                # [Landing] The "Who are you?" Gateway
+├── login.html                # [Auth] Universal Login (Customer/Shopkeeper/Admin)
+├── signup.html               # [Auth] Animated Split-Screen (Buy vs Sell)
+│
+├── css/
+│   └── style.css             # [Core] The Design Engine (Glassmorphism & Themes)
+│
+├── js/
+│   ├── script.js             # [Core] Global Logic (Dark Mode, Tab Switching)
+│   ├── shopkeeper.js         # [Logic] Shopkeeper Modals & Language Translation
+│   └── delivery.js           # [Logic] Delivery Dashboard Simulation
+│
+├── pages/ (Recommended to keep in root for now, but logical separation below)
+│   ├── customer.html         # [User] Main Shopping Feed
+│   ├── customer_register.html# [User] Signup with GPS Location
+│   ├── cart.html             # [User] Shopping Cart
+│   ├── payment.html          # [User] Payment Gateway Mockup
+│   │
+│   ├── shopkeeper.html       # [Partner] Main Dashboard (Orders, Products)
+│   ├── shop_register.html    # [Partner] First-time Shop Setup
+│   │
+│   ├── delivery_login.html   # [Logistics] Delivery Partner Login/Signup
+│   ├── delivery_dashboard.html # [Logistics] Live Order Tracking
+│   │
+│   └── admin.html            # [Admin] Global Statistics
+│
+└── README.md                 # This File
 
-Page: shopkeeper.html (Modal Window)
+================================================================================
+                                2. COLOR SYSTEM
+================================================================================
+The CSS uses CSS Variables (`var(--primary)`) to switch themes dynamically.
 
-Endpoint: POST /api/product/add
+| ROLE          | PRIMARY COLOR       | HEX CODE  | ACCENT COLOR |
+|---------------|---------------------|-----------|--------------|
+| CUSTOMER      | Electric Violet     | #6366f1   | Cyan (#06b6d4) |
+| SHOPKEEPER    | Sunset Orange       | #f97316   | Amber (#f59e0b) |
+| ADMIN         | Emerald Green       | #10b981   | Blue (#3b82f6) |
+| DELIVERY BOY  | Crimson Red         | #ef4444   | Dark Red (#991b1b) |
+| DARK MODE     | Deep Black          | #050505   | (Default Bg) |
+| LIGHT MODE    | Off-White           | #f4f4f5   | (Override)   |
 
-Frontend sends FormData:
+================================================================================
+                            3. BACKEND API REQUIREMENTS
+================================================================================
+Your backend developer must create these Endpoints to make the frontend functional.
 
-shop_id: 101
+--------------------------------------------------------------------------------
+A. AUTHENTICATION
+--------------------------------------------------------------------------------
+[POST] /api/login
+       Input:  { email, password, role }
+       Output: { success: true, token: "xyz", redirect: "/dashboard" }
 
-name: "Basmati Rice"
+[POST] /api/register/customer
+       Input:  { name, mobile, password, lat, lng }
 
-price: 10.00
+[POST] /api/register/shop
+       Input:  { owner_id, shop_name, category, description, location }
+       Output: { shop_id: 101, qr_string: "DigiShop-101" }
 
-image: [Binary File]
+--------------------------------------------------------------------------------
+B. SHOPKEEPER DASHBOARD (`shopkeeper.js`)
+--------------------------------------------------------------------------------
+[GET]  /api/shop/orders
+       Returns list of active orders grouped by ID.
+       JSON Structure:
+       [
+         {
+           "order_id": 1024,
+           "status": "PAID",
+           "items": [{"name": "Potato", "price": 2.00}],
+           "actions": ["accept", "reject"]
+         }
+       ]
 
-5. Get Active Orders (Grouped)
+[POST] /api/product/add
+       Input: { name, price, shop_id }
 
-Page: shopkeeper.html
+[POST] /api/shop/update-description
+       Input: { shop_id, new_description }
 
-Endpoint: GET /api/shop/orders
+--------------------------------------------------------------------------------
+C. DELIVERY PORTAL (`delivery_dashboard.html`)
+--------------------------------------------------------------------------------
+[POST] /api/delivery/connect
+       Input:  { delivery_user_id, shop_id, access_password }
+       Output: { success: true, shop_name: "Raju Store" }
 
-Requirement: The frontend expects orders to be grouped by Order ID (one order containing multiple items).
+[GET]  /api/delivery/live-feed
+       Polling endpoint to check for "Ready for Delivery" orders.
+       Returns:
+       {
+         "order_id": 1025,
+         "customer_address": "12/B Lake View",
+         "payment_mode": "COD",
+         "amount": 15.00
+       }
 
-Expected Data Structure:
+================================================================================
+                            4. SPECIAL FEATURES LOGIC
+================================================================================
 
-JSON
+1. MULTILINGUAL SUPPORT (Shopkeeper Page)
+   - Logic File: `shopkeeper.js`
+   - Languages: English (en), Hindi (hi), Bengali (bn).
+   - Implementation: The frontend stores a JSON dictionary `translations`. 
+     When the dropdown changes, it swaps the `innerText` of IDs like `txt_scan`.
 
-[
-  {
-    "order_id": 1024,
-    "customer_name": "Rahul",
-    "total_amount": 12.00,
-    "payment_status": "PAID",
-    "items": [
-      { "name": "Potato", "qty": "2kg", "price": 2.00 },
-      { "name": "Rice", "qty": "5kg", "price": 10.00 }
-    ],
-    "actions": ["accept", "reject"]
-  },
-  {
-    "order_id": 1025,
-    "customer_name": "Priya",
-    "total_amount": 5.00,
-    "payment_status": "COD", // Frontend will color this Orange
-    "items": [
-      { "name": "Headphone", "qty": "1", "price": 5.00 }
-    ],
-    "actions": ["mark_delivered"]
-  }
-]
-3. Logic Notes for Backend Developer
-QR Code Logic: The frontend uses https://api.qrserver.com/v1/create-qr-code/?data=[YOUR_STRING] to display QRs.
+2. DARK / LIGHT MODE
+   - Logic: Toggles the class `.light-mode` on the `<body>` tag.
+   - Default: Dark Mode (for premium aesthetic).
+   - Delivery Page: Has separate override styles in `delivery_dashboard.html`.
 
-Backend Task: When sending shop details, just send the unique string (e.g., shop_id_101). The frontend will handle the image generation.
+3. GPS LOCATION (Customer Signup)
+   - Uses: `navigator.geolocation.getCurrentPosition()`.
+   - Note: This works on `localhost` and `https`. It may be blocked on `http` 
+     unless you are testing locally.
 
-Order Status Colors:
+================================================================================
+                                5. QUICK START
+================================================================================
+1. Clone the repo:
+   git clone https://github.com/Riju5380/Monolith-Corporation.git
 
-If payment_status == "PAID" -> Text is Green.
+2. Open the folder.
 
-If payment_status == "COD" or "PENDING" -> Text is Orange.
+3. Launch:
+   Double-click `index.html`.
 
-Cart Persistence: Decide if the Cart is stored in the Database (Users table) or if the Frontend should use localStorage. (Database recommended for cross-device sync).
+4. Test Flow:
+   - Click "Partner" -> Login -> See Orange Theme.
+   - Click "Delivery" (in URL type delivery_login.html) -> See Red Theme.
+   - Test Language Switcher on Shopkeeper Page.
