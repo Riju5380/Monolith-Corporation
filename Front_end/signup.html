@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | Join Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background: #050505; height: 100vh; overflow: hidden; }
+
+        /* Split Screen Layout */
+        .container { display: flex; width: 100%; height: 100vh; position: relative; }
+
+        .split {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Hover Effects: One expands, other shrinks */
+        .container:hover .split { opacity: 0.3; }
+        .container .split:hover { flex: 1.5; opacity: 1; background: rgba(255,255,255,0.03); }
+
+        /* Customer Side (Left) */
+        .left { color: #6366f1; } /* Violet */
+        .left::before {
+            content: "🛍️";
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.05;
+            transition: 0.5s;
+        }
+        .left:hover::before { transform: scale(1.2) rotate(-10deg); opacity: 0.15; }
+
+        /* Shopkeeper Side (Right) */
+        .right { color: #f97316; } /* Orange */
+        .right::before {
+            content: "🏪";
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.05;
+            transition: 0.5s;
+        }
+        .right:hover::before { transform: scale(1.2) rotate(10deg); opacity: 0.15; }
+
+        /* Typography */
+        h1 { font-size: 4rem; z-index: 2; pointer-events: none; text-shadow: 0 0 20px currentColor; }
+        p { font-size: 1.2rem; color: #fff; z-index: 2; pointer-events: none; margin-top: 10px; }
+        
+        .btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            border: 2px solid currentColor;
+            background: transparent;
+            color: white;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 2;
+            transition: 0.3s;
+        }
+        .btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+
+        /* Back Link */
+        .back { position: absolute; top: 20px; left: 20px; color: white; text-decoration: none; z-index: 10; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <a href="login.html" class="back">← Back to Login</a>
+
+    <div class="container">
+        <div class="split left" onclick="window.location.href='customer_register.html'">
+            <h1>BUY</h1>
+            <p>I am a Customer</p>
+            <button class="btn">Join Now</button>
+        </div>
+
+        <div class="split right" onclick="window.location.href='shop_register.html'">
+            <h1>SELL</h1>
+            <p>I am a Shopkeeper</p>
+            <button class="btn">List Shop</button>
+        </div>
+    </div>
+
+</body>
+</html>

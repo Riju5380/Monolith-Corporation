@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-theme">
+
+    <div class="container">
+        <header>
+            <div class="brand">Monolith<span>ADMIN</span></div>
+            <div class="controls">
+                <button class="btn" onclick="toggleDarkMode()">🌗</button>
+                <button class="btn" onclick="window.location.href='index.html'">Exit</button>
+            </div>
+        </header>
+
+        <div class="stats-row">
+            <div class="glass-panel stat-card">
+                <p>Total Sales</p>
+                <h3>$45,200</h3>
+            </div>
+            <div class="glass-panel stat-card">
+                <p>Active Shops</p>
+                <h3>128</h3>
+            </div>
+            <div class="glass-panel stat-card">
+                <p>Active Users</p>
+                <h3>3,400</h3>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h3>Shop Monitoring</h3>
+            <br>
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <th style="padding: 10px;">Shop Name</th>
+                    <th>Owner</th>
+                    <th>Status</th>
+                    <th>Revenue</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">Green Valley Veggies</td>
+                    <td>Ramesh Kumar</td>
+                    <td style="color: var(--primary)">● Online</td>
+                    <td>$1,200</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">Tech Haven</td>
+                    <td>Sarah Smith</td>
+                    <td style="color: var(--primary)">● Online</td>
+                    <td>$4,500</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

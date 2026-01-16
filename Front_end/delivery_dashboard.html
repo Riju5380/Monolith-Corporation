@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiDELIVERY | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- DELIVERY THEME (Dark by Default) --- */
+        :root { --primary: #ef4444; --accent: #991b1b; }
+        
+        body { 
+            background-color: #0f0505; 
+            color: white; 
+            transition: 0.3s;
+        }
+
+        /* --- INPUT FIELD STYLES (Fixed Text Color) --- */
+        .input-field {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            outline: none;
+            
+            /* Text Color for Dark Mode (Default) */
+            color: #ffffff; 
+            font-size: 1rem;
+        }
+
+        .input-field::placeholder { color: #cccccc; }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* --- LIGHT MODE OVERRIDES --- */
+        body.light-mode { 
+            background-color: #f4f4f5; 
+            color: #18181b; 
+        }
+
+        body.light-mode .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        body.light-mode .input-field {
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: #000000; /* Black text for light mode */
+        }
+        
+        body.light-mode .input-field::placeholder { color: #666666; }
+
+        /* --- UTILITIES --- */
+        .status-badge {
+            display: inline-block; padding: 5px 12px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: bold;
+        }
+        .status-active { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+
+        .hidden { display: none !important; }
+        .slide-in { animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="brand">Digi<span>DELIVERY</span></div>
+            <div class="controls">
+                <button class="btn" onclick="toggleDeliveryTheme()">🌗 Mode</button>
+                <button class="btn" onclick="window.location.href='delivery_login.html'">Log Out</button>
+            </div>
+        </header>
+
+        <div id="step-connect" class="glass-panel" style="max-width: 500px; margin: 50px auto; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔗</div>
+            <h3>Connect to Shop</h3>
+            <p style="opacity: 0.7; margin-bottom: 20px;">Enter the Shop ID and Access Code.</p>
+            
+            <input type="text" id="shopID" class="input-field" placeholder="Shop ID (e.g. 101)">
+            <input type="password" id="shopPass" class="input-field" placeholder="Shop Access Password">
+            
+            <button class="btn btn-primary" style="width: 100%;" onclick="connectToShop()">Connect System</button>
+        </div>
+
+        <div id="step-dashboard" class="hidden">
+            
+            <div class="glass-panel" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 15px;">
+                <div>
+                    <h4 id="shop-name-display">Connected: Raju's General Store</h4>
+                    <span class="status-badge status-active">● Online</span>
+                </div>
+                <div style="text-align: right;">
+                    <small style="opacity: 0.7;">Deliveries Today</small>
+                    <h3>02</h3>
+                </div>
+            </div>
+
+            <h3>Incoming Deliveries</h3>
+            <br>
+
+            <div id="orders-container">
+                <p id="no-orders-msg" style="opacity: 0.6; text-align: center; margin-top: 50px;">Waiting for shopkeeper to assign delivery...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. THEME TOGGLE LOGIC
+        function toggleDeliveryTheme() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        // 2. CONNECTION & DASHBOARD LOGIC
+        function connectToShop() {
+            const id = document.getElementById('shopID').value;
+            const pass = document.getElementById('shopPass').value;
+
+            if(id && pass) {
+                // UI: Hide Connect Panel, Show Dashboard
+                document.getElementById('step-connect').classList.add('hidden');
+                document.getElementById('step-dashboard').classList.remove('hidden');
+
+                // SIMULATION: Simulate shopkeeper sending an order after 3 seconds
+                setTimeout(() => {
+                    simulateIncomingOrder();
+                }, 3000);
+            } else {
+                alert("Please enter Shop ID and Password");
+            }
+        }
+
+        function simulateIncomingOrder() {
+            // Remove "No orders" text
+            const noOrders = document.getElementById('no-orders-msg');
+            if(noOrders) noOrders.style.display = 'none';
+
+            // Create the Order Card HTML
+            const orderHTML = `
+            <div class="glass-panel slide-in" style="border-left: 5px solid #ef4444; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <div>
+                        <h2>Order #1025</h2>
+                        <p style="opacity: 0.7;">From: Raju's General Store</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="color: #ef4444;">COD: $15.00</h3>
+                        <small>2.5 km away</small>
+                    </div>
+                </div>
+
+                <div style="background: rgba(125,125,125,0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <p><strong>Customer:</strong> Priya Singh</p>
+                    <p style="opacity: 0.7;">📍 12/B, Lake View Road, Sector 5</p>
+                    <br>
+                    <p><strong>Items:</strong></p>
+                    <ul style="padding-left: 20px; opacity: 0.7; margin-top: 5px;">
+                        <li>1x Bluetooth Headset</li>
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="flex: 1; border: 1px solid var(--glass-border);">Navigate 🗺️</button>
+                    <button class="btn btn-primary" style="flex: 1; background: #ef4444; color: white;" onclick="completeDelivery(this)">Mark Delivered</button>
+                </div>
+            </div>
+            `;
+
+            document.getElementById('orders-container').innerHTML += orderHTML;
+        }
+
+        function completeDelivery(btn) {
+            btn.innerHTML = "Completed ✅";
+            btn.style.background = "#10b981"; // Green
+            setTimeout(() => {
+                const card = btn.closest('.glass-panel');
+                card.style.opacity = '0.5';
+                card.style.pointerEvents = 'none';
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>

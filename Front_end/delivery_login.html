@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiDELIVERY | Partner Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Delivery Theme Overrides (Red/Crimson) */
+        :root { --primary: #ef4444; --accent: #b91c1c; }
+        
+        body { background-color: #0f0505; }
+        
+        .toggle-container {
+            display: flex; background: rgba(255,255,255,0.1);
+            border-radius: 50px; margin-bottom: 20px; padding: 5px;
+        }
+        .toggle-btn {
+            flex: 1; padding: 10px; border: none; background: none;
+            color: #888; cursor: pointer; border-radius: 40px; transition: 0.3s;
+        }
+        .toggle-btn.active { background: var(--primary); color: white; font-weight: bold; }
+        
+        .hidden { display: none; }
+
+        /* --- INPUT FIELD STYLES (Color Fixed Here) --- */
+        .input-field {
+            width: 100%;
+            margin-bottom: 15px; 
+            padding: 12px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 8px;
+            outline: none;
+            
+            /* CHANGE TEXT COLOR HERE */
+            color: #ffffff;  /* Pure White Text when typing */
+            font-size: 1rem;
+        }
+
+        /* CHANGE PLACEHOLDER COLOR HERE */
+        .input-field::placeholder {
+            color: #cccccc; /* Light Grey for hint text */
+            opacity: 1;
+        }
+
+        /* Focus Effect (Glow) */
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gradient-bg">
+        <div class="orb orb-1" style="background: #ef4444;"></div>
+        <div class="orb orb-2" style="background: #b91c1c;"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <div class="container" style="max-width: 400px; margin-top: 10vh;">
+        <div class="glass-panel" style="text-align: center;">
+            <h2 style="margin-bottom: 5px;">Delivery Partner</h2>
+            <p style="color: #888; margin-bottom: 20px;">Monolith Logistics Division</p>
+
+            <div class="toggle-container">
+                <button class="toggle-btn active" onclick="showForm('login')">Login</button>
+                <button class="toggle-btn" onclick="showForm('signup')">Sign Up</button>
+            </div>
+
+            <form id="form-login" onsubmit="event.preventDefault(); handleLogin();">
+                <input type="text" class="input-field" placeholder="User ID / Mobile" required>
+                <input type="password" class="input-field" placeholder="Password" required>
+                <button class="btn btn-primary" style="width: 100%;">Enter Portal</button>
+            </form>
+
+            <form id="form-signup" class="hidden" onsubmit="event.preventDefault(); handleSignup();">
+                <input type="text" class="input-field" placeholder="Full Name" required>
+                <input type="tel" class="input-field" placeholder="Mobile Number" required>
+                <input type="text" class="input-field" placeholder="Vehicle Number" required>
+                <input type="password" class="input-field" placeholder="Create Password" required>
+                <button class="btn btn-primary" style="width: 100%;">Register</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        function showForm(type) {
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('form').forEach(f => f.classList.add('hidden'));
+
+            if(type === 'login') {
+                document.getElementById('form-login').classList.remove('hidden');
+                document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+            } else {
+                document.getElementById('form-signup').classList.remove('hidden');
+                document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+            }
+        }
+
+        function handleLogin() {
+            // Backend: Verify credentials here
+            window.location.href = 'delivery_dashboard.html';
+        }
+
+        function handleSignup() {
+            // Backend: Create account here
+            alert("Registration Pending Approval. Logging you in for demo...");
+            window.location.href = 'delivery_dashboard.html';
+        }
+    </script>
+</body>
+</html>

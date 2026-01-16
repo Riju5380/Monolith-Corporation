@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | Partner Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- STYLES FOR POPUPS --- */
+        .custom-modal {
+            display: none; /* Hidden by default */
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 99999; /* High Z-index */
+            justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background: #18181b;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%; max-width: 400px;
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn { from { transform: scale(0.9); opacity:0; } to { transform: scale(1); opacity:1; }}
+
+        .close-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: none; border: none;
+            color: #fff; font-size: 1.5rem; cursor: pointer;
+        }
+
+        /* Order Cards */
+        .order-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        
+        .edit-trigger {
+            cursor: pointer; color: var(--primary); font-size: 0.8rem;
+            margin-top: 5px; display: inline-block;
+            border: 1px dashed var(--glass-border); padding: 2px 8px; border-radius: 4px;
+        }
+        
+        .sm-btn {
+            font-size: 0.8rem; text-decoration: underline; background: none; border: none;
+            color: var(--text-muted); cursor: pointer; margin-bottom: 10px; display: inline-block;
+        }
+        .sm-btn:hover { color: var(--primary); }
+    </style>
+</head>
+<body class="shopkeeper-theme">
+
+    <div class="container">
+        <header>
+            <div class="brand">My<span>SHOP</span></div>
+            <div class="controls">
+                
+                <button class="btn btn-primary" id="txt_add_prod" onclick="openProductModal()">+ Add Product</button>
+                
+                <select id="langSelect" class="btn" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                </select>
+                
+                <button class="btn" onclick="toggleDarkMode()">🌗</button>
+                
+                <button class="btn" onclick="location.href='index.html'">Log Out</button>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="glass-panel qr-section">
+                <h3>Raju's General Store</h3>
+                <p id="displayDesc" style="color: #aaa; margin-top: 10px;">Famous for fresh vegetables and daily essentials.</p>
+                
+                <div class="edit-trigger" onclick="openEditModal()">✏️ <span id="txt_edit_desc">Edit Description</span></div>
+
+                <div class="qr-box" style="margin-top: 20px;">
+                    <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=DigiShop-123" alt="QR">
+                </div>
+                
+                <button class="sm-btn" onclick="downloadQR()">⬇ Download QR Code</button>
+                
+                <p id="txt_scan">Scan to order</p>
+                <button class="btn btn-primary" style="width: 100%" id="txt_share">Share Shop Link</button>
+            </div>
+
+            <div class="glass-panel">
+                <h3 id="txt_active_orders">Active Orders</h3>
+                <br>
+                <div class="order-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <strong>Order #1024</strong>
+                        <span style="color: #10b981; font-weight:bold;">PAID</span>
+                    </div>
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px;">
+                        <p>2kg Potato - $2.00</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex:1; border:1px solid #10b981; color:#10b981; background:transparent;">Accept</button>
+                    </div>
+                </div>
+                
+                <div class="order-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <strong>Order #1025</strong>
+                        <span style="color: #f59e0b; font-weight:bold;">COD</span>
+                    </div>
+                    <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px;">
+                        <p>1x Bluetooth Headset - $15.00</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="width:100%; background: var(--primary); color: white;" onclick="markDelivered(this)">Mark Delivered</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-product" class="custom-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAllModals()">&times;</button>
+            <h3>Add New Product</h3>
+            <br>
+            <input type="text" class="input-field" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #444; color:white;" placeholder="Product Name">
+            <input type="number" class="input-field" style="width:100%; padding:10px; margin-bottom:20px; background:#222; border:1px solid #444; color:white;" placeholder="Price">
+            <button class="btn btn-primary" style="width:100%;" onclick="saveProductAction()">Save Item</button>
+        </div>
+    </div>
+
+    <div id="modal-edit" class="custom-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAllModals()">&times;</button>
+            <h3>Edit Shop Details</h3>
+            <br>
+            <textarea id="descInput" rows="4" style="width:100%; padding:10px; background:#222; border:1px solid #444; color:white;"></textarea>
+            <br><br>
+            <button class="btn btn-primary" style="width:100%;" onclick="saveDescAction()">Update</button>
+        </div>
+    </div>
+
+    <script src="shopkeeper.js"></script>
+
+</body>
+</html>

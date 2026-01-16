@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSHOP | Customer Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles for Map Section */
+        .map-container {
+            width: 100%;
+            height: 150px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+        
+        /* Simulated Map Image */
+        .map-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .location-status {
+            position: absolute;
+            background: rgba(0,0,0,0.7);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #10b981; /* Green */
+            display: none; /* Hidden initially */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gradient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <div class="container" style="max-width: 500px; margin-top: 5vh;">
+        
+        <header style="margin-bottom: 20px;">
+            <div class="brand">Digi<span>SHOP</span></div>
+            <a href="signup.html" style="color: var(--text-main); text-decoration: none;">← Back</a>
+        </header>
+
+        <div class="glass-panel">
+            <h2 style="margin-bottom: 10px;">Create Account</h2>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">Join the future of shopping.</p>
+
+            <form onsubmit="event.preventDefault(); registerCustomer();">
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-size: 0.9rem;">Full Name</label>
+                    <input type="text" id="custName" class="input-field" placeholder="e.g. Rahul Sharma" required>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-size: 0.9rem;">Mobile Number</label>
+                    <input type="tel" id="custMobile" class="input-field" placeholder="+91 98765 43210" required>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px; font-size: 0.9rem;">Create Password</label>
+                    <input type="password" id="custPass" class="input-field" placeholder="••••••••" required>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom: 5px; font-size: 0.9rem;">Delivery Location</label>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="custAddress" class="input-field" placeholder="House No, Street, City" style="flex: 1;">
+                        <button type="button" class="btn" onclick="detectLocation()" style="border: 1px solid var(--primary); color: var(--primary);">
+                            📍 Detect
+                        </button>
+                    </div>
+
+                    <div class="map-container">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/World_map_blank_without_borders.svg/1000px-World_map_blank_without_borders.svg.png" class="map-bg" id="mapPreview">
+                        <div class="location-status" id="locStatus">✓ Location Pinpointed</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+                Already a member? <a href="login.html" style="color: var(--primary);">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // --- GEOLOCATION LOGIC ---
+        function detectLocation() {
+            const statusBox = document.getElementById('locStatus');
+            const addrInput = document.getElementById('custAddress');
+            const btn = document.querySelector('button[onclick="detectLocation()"]');
+
+            btn.innerText = "Locating...";
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Success
+                        const lat = position.coords.latitude.toFixed(4);
+                        const lng = position.coords.longitude.toFixed(4);
+                        
+                        // In a real app, you would send lat/lng to Google Maps API to get the street name.
+                        // Here we simulate it:
+                        addrInput.value = `Lat: ${lat}, Lng: ${lng} (Auto-Detected)`;
+                        statusBox.style.display = "block";
+                        btn.innerText = "📍 Update";
+                        btn.style.borderColor = "#10b981"; // Green
+                        btn.style.color = "#10b981";
+                    }, 
+                    (error) => {
+                        // Error
+                        alert("Could not detect location. Please enter manually.");
+                        btn.innerText = "📍 Detect";
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // --- SUBMIT LOGIC ---
+        function registerCustomer() {
+            const name = document.getElementById('custName').value;
+            // Simulate API Call
+            const submitBtn = document.querySelector('.btn-primary');
+            submitBtn.innerHTML = "Creating Account...";
+            
+            setTimeout(() => {
+                alert(`Welcome, ${name}! Your account is ready.`);
+                // Redirect to the Customer Dashboard
+                window.location.href = 'customer.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
